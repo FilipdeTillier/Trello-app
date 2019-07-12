@@ -1,0 +1,6 @@
+@import './styles/flexbox.scss';
+.main {
+    @include flexbox($justify: center, $align: center);
+    width: 100vw;
+    height: 100vh;
+}

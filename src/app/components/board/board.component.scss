@@ -1,0 +1,8 @@
+@import '../../styles/flexbox.scss';
+.board {
+    @include flexbox();
+    .board__list {}
+    .board__card {
+        width: 150px;
+    }
+}

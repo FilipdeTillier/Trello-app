@@ -1,0 +1,13 @@
+@charset 'UTF-8';
+@mixin flexbox($direction: row, $align: flex-start, $justify: flex-start, $wrap: nowrap, $content: stretch) {
+    display: flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    flex-direction: $direction;
+    align-items: $align;
+    justify-content: $justify;
+    flex-wrap: $wrap;
+    align-content: $content;
+}

@@ -3,14 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BoardComponent } from './components/board/board.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BoardComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]
