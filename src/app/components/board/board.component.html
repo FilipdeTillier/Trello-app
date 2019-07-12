@@ -1,17 +1,14 @@
 <div class="board">
-    <div class="board__list">
+    <div class="board__list" cdkDropList #toDoList="cdkDropList" [cdkDropListData]="todo" [cdkDropListConnectedTo]="[doingList, doneList]" (cdkDropListDropped)="drop($event)">
         <h1>To do</h1>
-        <div cdkDrag class="board__card">Card</div>
+        <div *ngFor="let task of todo" cdkDrag class="board__card">{{task}}</div>
     </div>
-    <div class="board__list">
+    <div class="board__list" cdkDropList #doingList="cdkDropList" [cdkDropListData]="doing" [cdkDropListConnectedTo]="[toDoList, doneList]" (cdkDropListDropped)="drop($event)">
         <h1>Doing</h1>
-        <div cdkDrag class="board__card">Card</div>
-
+        <div *ngFor="let task of doing" cdkDrag class="board__card">{{task}}</div>
     </div>
-    <div class="board__list">
+    <div class="board__list" cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[toDoList, doingList]" (cdkDropListDropped)="drop($event)">
         <h1>Done</h1>
-
-        <div cdkDrag class="board__card">Card</div>
-
+        <div *ngFor="let task of done" cdkDrag class="board__card">{{task}}</div>
     </div>
 </div>
