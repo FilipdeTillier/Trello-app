@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ViewportScroller } from '@angular/common';
+import { BoardService } from 'src/app/services/board.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'app-board',
@@ -8,29 +10,24 @@ import { ViewportScroller } from '@angular/common';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
-  public todo = [
-    'task1',
-    'task2',
-    'task3',
-  ];
-  public doing = [
-    'task4',
-    'task5',
-    'task6',
+  public todo: any = [];
+  public doing: any = [];
+  public done: any = [];
 
-  ];
-  public done = [
-    'task7',
-    'task8',
-    'task9',
+  private instanceSubscription: Subscription[] = [];
 
-  ];
+  constructor(private boardService: BoardService) {
 
-  constructor(private ViewportScroller: ViewportScroller) {
-    this.ViewportScroller;
   }
 
+  // constructor(private ViewportScroller: ViewportScroller) {
+  //   this.ViewportScroller;
+  // }
+
   ngOnInit() {
+    this.instanceSubscription.push(
+      this.boardService.getCardsFromListById('5d289689edfbe259d1ae68f3').subscribe(cards => this.todo = cards),
+    );
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -40,6 +37,10 @@ export class BoardComponent implements OnInit {
     } else {
       transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex);
     }
+  }
+
+  OnDestroy() {
+    this.instanceSubscription.forEach((subscription: Subscription) => subscription.unsubscribe());
   }
 
 }
