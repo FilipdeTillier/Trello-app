@@ -1,4 +1,9 @@
 @import '../../styles/flexbox.scss';
 .card {
+    @include flexbox($direction: column);
     padding: 20px;
+    &__actions {
+        @include flexbox($justify: flex-end);
+        width: 100%;
+    }
 }

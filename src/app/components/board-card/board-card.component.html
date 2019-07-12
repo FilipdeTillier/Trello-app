@@ -1,3 +1,10 @@
 <div class="card">
-    {{task.name}}
+    <div class="card__actions">
+        <button (click)="editCard()">Edit</button>
+        <button (click)="deleteCard()">Delete</button>
+    </div>
+    <div class="card__daa">
+
+        {{task.name}}
+    </div>
 </div>

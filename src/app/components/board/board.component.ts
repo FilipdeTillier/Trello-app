@@ -14,19 +14,14 @@ export class BoardComponent implements OnInit {
   public doing: any = [];
   public done: any = [];
   private toDoListId: string = "5d289689edfbe259d1ae68f3";
-  private doingListId: string = "5d289689ce7e4180f580f392";
+  private doingListId: string = "5d2896899b381b8a08e8f1db";
   private doneListId: string = "5d2896890ae4ef44fa377ac6";
-
 
   private instanceSubscription: Subscription[] = [];
 
   constructor(private boardService: BoardService) {
 
   }
-
-  // constructor(private ViewportScroller: ViewportScroller) {
-  //   this.ViewportScroller;
-  // }
 
   ngOnInit() {
     this.instanceSubscription.push(
@@ -37,13 +32,29 @@ export class BoardComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    const { previousContainer, container, previousIndex, currentIndex } = event;
+    const { previousContainer, container, previousIndex, currentIndex, item } = event;
     console.log(previousContainer, container, previousIndex, currentIndex);
     if (previousContainer === container) {
       moveItemInArray(container.data, previousIndex, currentIndex);
     } else {
       transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex);
+      item.data.idList = container.id;
+      this.updateCard(item.data);
     }
+  }
+
+  deleteCard(id: string) {
+    this.instanceSubscription.push(
+      this.boardService.deleteCardById(id).subscribe(res => console.log(res)),
+    )
+  }
+
+  editCard(id: string) {
+    console.log(id)
+  }
+
+  updateCard(cardData: any) {
+    this.boardService.updateCard(cardData).subscribe(res => console.log(res))
   }
 
   OnDestroy() {

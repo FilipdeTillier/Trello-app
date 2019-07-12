@@ -15,8 +15,8 @@ export class BoardService {
   private API_URL: string = `https://api.trello.com/1/boards/${this.boardId}?key=
   ${this.apiKey}&token=${this.token}`;
   private toDoListId: string = "5d289689edfbe259d1ae68f3";
-  private doingListId: string = "5d289689ce7e4180f580f392";
-  private doneListId: string = "5d289689ce7e4180f580f392";
+  private doingListId: string = "5d2896899b381b8a08e8f1db";
+  private doneListId: string = "5d2896890ae4ef44fa377ac6";
 
   constructor(private http: HttpClient) { }
 
@@ -31,9 +31,20 @@ export class BoardService {
     return this.http.get(url);
   }
 
-  public createCard(taskData) {
-    const data = taskData;
+  public createCard(cardData) {
+    const data = cardData;
     const url = `https://api.trello.com/1/cards?idList=${this.toDoListId}&keepFromSource=all${this.auth}`;
     return this.http.post(url, data)
+  }
+
+  public deleteCardById(id: string) {
+    const url = `https://api.trello.com/1/cards/${id}?${this.auth}`;
+    return this.http.delete(url);
+  }
+
+  public updateCard(cardData: any) {
+    const { id } = cardData;
+    const url = `https://api.trello.com/1/cards/${id}?${this.auth}`;
+    return this.http.put(url, cardData);
   }
 }
