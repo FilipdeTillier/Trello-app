@@ -1,0 +1,13 @@
+<div class="task">
+    <form class="task__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="task__control">
+            <label class="task__label required">Task name</label>
+            <input formControlName="name" [ngClass]="{ 'invalid': isInvalid('name')}" class="task__input required" type="text">
+        </div>
+        <div class="task__control">
+            <label class="task__label required">Description</label>
+            <input formControlName="desc" [ngClass]="{ 'invalid': isInvalid('desc')}" class="task__input required" type="text">
+        </div>
+        <input (click)="submit($event)" type="submit" value="SEND" class="task__submit">
+    </form>
+</div>

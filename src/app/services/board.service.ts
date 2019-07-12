@@ -30,4 +30,10 @@ export class BoardService {
 
     return this.http.get(url);
   }
+
+  public createCard(taskData) {
+    const data = taskData;
+    const url = `https://api.trello.com/1/cards?idList=${this.toDoListId}&keepFromSource=all${this.auth}`;
+    return this.http.post(url, data)
+  }
 }
