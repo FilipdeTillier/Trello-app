@@ -6,8 +6,11 @@
         </div>
         <div class="task__control">
             <label class="task__label required">Description</label>
-            <input formControlName="desc" [ngClass]="{ 'invalid': isInvalid('desc')}" class="task__input required" type="text">
+            <textarea formControlName="desc" [ngClass]="{ 'invalid': isInvalid('desc')}" class="task__textarea required"></textarea>
         </div>
-        <input (click)="submit($event)" type="submit" value="SEND" class="task__submit">
+        <div class="task__buttons">
+            <input (click)="submit($event)" type="submit" value="SEND" class="task__submit">
+            <button (click)="close()" type="button" class="task__cancel-button">Cancel</button>
+        </div>
     </form>
 </div>

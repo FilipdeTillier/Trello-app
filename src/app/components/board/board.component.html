@@ -2,6 +2,7 @@
     <div class="board__list" id="{{toDoListId}}" cdkDropList #toDoList="cdkDropList" [cdkDropListData]="todo" [cdkDropListConnectedTo]="[doingList, doneList]" (cdkDropListDropped)="drop($event)">
         <h1 class="board__header">To do</h1>
         <app-board-card (delete)="deleteCard($event)" [cdkDragData]="task" (edit)="editCard($event)" *ngFor="let task of todo" cdkDrag class="board__card" [task]="task"></app-board-card>
+        <button class="board__button" (click)="openModal()">+</button>
     </div>
     <div class="board__list" id="{{doingListId}}" cdkDropList #doingList="cdkDropList" [cdkDropListData]="doing" [cdkDropListConnectedTo]="[toDoList, doneList]" (cdkDropListDropped)="drop($event)">
         <h1 class="board__header">Doing</h1>
@@ -12,4 +13,6 @@
         <app-board-card (delete)="deleteCard($event)" [cdkDragData]="task" (edit)="editCard($event)" *ngFor="let task of done" cdkDrag class="board__card" [task]="task"></app-board-card>
     </div>
 </div>
-<app-board-new-task></app-board-new-task>
+<div *ngIf="showModal" class="modal">
+    <app-board-new-task (cancel)="closeModal()" class="modal__content" (add)="addCard($event)"></app-board-new-task>
+</div>

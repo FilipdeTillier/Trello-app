@@ -1,1 +1,20 @@
-.task {}
+@import '../../styles/flexbox.scss';
+.task {
+    border: 1px solid black;
+    padding: 100px;
+    background-color: white;
+    &__control {
+        @include flexbox($justify: space-between);
+        width: 300px;
+        margin-bottom: 20px;
+    }
+    &__buttons {
+        @include flexbox($justify: flex-end);
+    }
+    &__input {
+        width: 66%;
+    }
+    &__textarea {
+        width: 66%;
+    }
+}

@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { ViewportScroller } from '@angular/common';
 import { BoardService } from 'src/app/services/board.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 
 @Component({
   selector: 'app-board',
@@ -10,6 +11,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
+  public showModal: boolean = false;
   public todo: any = [];
   public doing: any = [];
   public done: any = [];
@@ -31,9 +33,8 @@ export class BoardComponent implements OnInit {
     );
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<string[]>): void {
     const { previousContainer, container, previousIndex, currentIndex, item } = event;
-    console.log(previousContainer, container, previousIndex, currentIndex);
     if (previousContainer === container) {
       moveItemInArray(container.data, previousIndex, currentIndex);
     } else {
@@ -42,6 +43,7 @@ export class BoardComponent implements OnInit {
       this.updateCard(item.data);
     }
   }
+  
 
   deleteCard(id: string) {
     this.instanceSubscription.push(
@@ -49,12 +51,27 @@ export class BoardComponent implements OnInit {
     )
   }
 
+  addCard(cardData: any) {
+    this.boardService.createCard(cardData).subscribe(res => this.showModal = false);
+    // this.boardService.createCard(cardData).pipe(
+    //   mergeMap(() => )
+    // );
+  }
+
   editCard(id: string) {
     console.log(id)
   }
 
-  updateCard(cardData: any) {
+  updateCard(cardData: any): void {
     this.boardService.updateCard(cardData).subscribe(res => console.log(res))
+  }
+
+  openModal(): void {
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
   }
 
   OnDestroy() {

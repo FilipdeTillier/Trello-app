@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { BoardService } from 'src/app/services/board.service';
 
@@ -14,6 +14,9 @@ export const FORM_PARAMS = {
 })
 export class BoardNewTaskComponent implements OnInit {
   public form: FormGroup;
+  @Output() add: EventEmitter<any> = new EventEmitter();
+  @Output() cancel: EventEmitter<any> = new EventEmitter();
+
   constructor(
     private formBuilder: FormBuilder,
     private boardService: BoardService
@@ -41,8 +44,12 @@ export class BoardNewTaskComponent implements OnInit {
   submit(e) {
     e.preventDefault();
     if (this.form.valid) {
-      this.boardService.createCard(this.form.value).subscribe(res => console.log(res))
+      this.add.emit(this.form.value)
     }
+  }
+
+  close(): void {
+    this.cancel.emit(true);
   }
 
 }
