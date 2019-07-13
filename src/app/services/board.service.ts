@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map } from 'rxjs/operators';
+import { map, concatAll, combineLatest, endWith, zip } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
+import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +48,15 @@ export class BoardService {
     const { id } = cardData;
     const url = `https://api.trello.com/1/cards/${id}?${this.auth}`;
     return this.http.put(url, cardData);
+  }
+
+  public getItems(ids: string[]): Observable<any> {
+
+    return <Observable<any>>forkJoin(
+      ids.map(id => {
+        const url = `https://api.trello.com/1/lists/${id}/cards?fields=all${this.auth}`;
+        return <Observable<any>>this.http.get(`${url}`);
+      })
+    ).pipe(concatAll());
   }
 }

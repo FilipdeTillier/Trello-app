@@ -15,6 +15,7 @@ export class BoardComponent implements OnInit {
   public todo: any = [];
   public doing: any = [];
   public done: any = [];
+  public cards: any = [];
   private toDoListId: string = "5d289689edfbe259d1ae68f3";
   private doingListId: string = "5d2896899b381b8a08e8f1db";
   private doneListId: string = "5d2896890ae4ef44fa377ac6";
@@ -27,10 +28,20 @@ export class BoardComponent implements OnInit {
 
   ngOnInit() {
     this.instanceSubscription.push(
-      this.boardService.getCardsFromListById(this.toDoListId).subscribe(cards => this.todo = cards),
-      this.boardService.getCardsFromListById(this.doingListId).subscribe(cards => this.doing = cards),
-      this.boardService.getCardsFromListById(this.doneListId).subscribe(cards => this.done = cards)
+      this.getAllCards()
+      // this.boardService.getCardsFromListById(this.toDoListId).subscribe(cards => this.todo = cards),
+      // this.boardService.getCardsFromListById(this.doingListId).subscribe(cards => this.doing = cards),
+      // this.boardService.getCardsFromListById(this.doneListId).subscribe(cards => this.done = cards)
     );
+  }
+
+  getAllCards(): Subscription {
+    // this.cards = [];
+    return this.boardService.getItems([this.toDoListId, this.doingListId, this.doneListId])
+      .subscribe(cards => {
+        this.cards = this.cards.concat(cards);
+        console.log(this.cards)
+      })
   }
 
   drop(event: CdkDragDrop<string[]>): void {
@@ -43,7 +54,10 @@ export class BoardComponent implements OnInit {
       this.updateCard(item.data);
     }
   }
-  
+
+  getCardsByBoardId(cards, idList) {
+    return cards.filter(card => card.idList === idList);
+  }
 
   deleteCard(id: string) {
     this.instanceSubscription.push(
@@ -63,7 +77,11 @@ export class BoardComponent implements OnInit {
   }
 
   updateCard(cardData: any): void {
-    this.boardService.updateCard(cardData).subscribe(res => console.log(res))
+    this.boardService.updateCard(cardData)
+      .subscribe((res: any) => {
+        const index = this.cards.find(({ id }) => id === res.id);
+        console.log(index);
+      });
   }
 
   openModal(): void {
