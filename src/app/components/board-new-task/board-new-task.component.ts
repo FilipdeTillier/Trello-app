@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { BoardService } from 'src/app/services/board.service';
 
@@ -12,22 +12,24 @@ export const FORM_PARAMS = {
   templateUrl: './board-new-task.component.html',
   styleUrls: ['./board-new-task.component.scss']
 })
-export class BoardNewTaskComponent implements OnInit {
-  public form: FormGroup;
+export class BoardNewTaskComponent implements OnInit, OnDestroy {
+  @Input() task: any;
   @Output() add: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
+  @Output() resetTask: EventEmitter<any> = new EventEmitter();
+  public form: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
-    private boardService: BoardService
   ) { }
 
   ngOnInit() {
+    const { name, desc } = this.task;
     this.form = this.formBuilder.group({
-      [FORM_PARAMS.taskName]: ['', [
+      [FORM_PARAMS.taskName]: [name || '', [
         Validators.required
       ]],
-      [FORM_PARAMS.description]: ['', [
+      [FORM_PARAMS.description]: [desc || '', [
       ]],
     });
   }
@@ -50,6 +52,11 @@ export class BoardNewTaskComponent implements OnInit {
 
   close(): void {
     this.cancel.emit(true);
+  }
+
+  ngOnDestroy() {
+    this.form.reset();
+    this.resetTask.emit({});
   }
 
 }

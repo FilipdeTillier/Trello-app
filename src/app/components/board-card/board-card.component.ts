@@ -19,7 +19,7 @@ export class BoardCardComponent implements OnInit {
   }
 
   editCard() {
-    this.edit.emit(this.task.id);
+    this.edit.emit(this.task);
   }
 
 }

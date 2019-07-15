@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map, concatAll, combineLatest, endWith, zip } from 'rxjs/operators';
+import { map, concatAll, combineLatest, endWith, zip, mergeAll, reduce } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 
@@ -57,6 +57,10 @@ export class BoardService {
         const url = `https://api.trello.com/1/lists/${id}/cards?fields=all${this.auth}`;
         return <Observable<any>>this.http.get(`${url}`);
       })
-    ).pipe(concatAll());
+    ).pipe(
+      reduce((a, b) => {
+        return a.concat(b);
+      }, [])
+    );
   }
 }

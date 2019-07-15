@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ViewportScroller } from '@angular/common';
-import { BoardService } from 'src/app/services/board.service';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { mergeMap } from 'rxjs/internal/operators/mergeMap';
+
+import { BoardService } from 'src/app/services/board.service';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
   public showModal: boolean = false;
-  public todo: any = [];
-  public doing: any = [];
-  public done: any = [];
+  public taskToUpdate: any;
+  public todo: any;
+  public doing: any;
+  public done: any;
   public cards: any = [];
   private toDoListId: string = "5d289689edfbe259d1ae68f3";
   private doingListId: string = "5d2896899b381b8a08e8f1db";
@@ -27,21 +27,19 @@ export class BoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.instanceSubscription.push(
-      this.getAllCards()
-      // this.boardService.getCardsFromListById(this.toDoListId).subscribe(cards => this.todo = cards),
-      // this.boardService.getCardsFromListById(this.doingListId).subscribe(cards => this.doing = cards),
-      // this.boardService.getCardsFromListById(this.doneListId).subscribe(cards => this.done = cards)
-    );
+    this.getAllCards();
   }
 
-  getAllCards(): Subscription {
-    // this.cards = [];
-    return this.boardService.getItems([this.toDoListId, this.doingListId, this.doneListId])
-      .subscribe(cards => {
-        this.cards = this.cards.concat(cards);
-        console.log(this.cards)
-      })
+  getAllCards(): void {
+    this.instanceSubscription.push(
+      this.boardService.getItems([this.toDoListId, this.doingListId, this.doneListId])
+        .subscribe(cards => {
+          this.cards = [...cards.flat()];
+          this.todo = this.getCardsByBoardId(this.cards, this.toDoListId);
+          this.doing = this.getCardsByBoardId(this.cards, this.doingListId);
+          this.done = this.getCardsByBoardId(this.cards, this.doneListId);
+        })
+    );
   }
 
   drop(event: CdkDragDrop<string[]>): void {
@@ -61,27 +59,32 @@ export class BoardComponent implements OnInit {
 
   deleteCard(id: string) {
     this.instanceSubscription.push(
-      this.boardService.deleteCardById(id).subscribe(res => console.log(res)),
+      this.boardService.deleteCardById(id).subscribe(res => this.getAllCards()),
     )
   }
 
   addCard(cardData: any) {
-    this.boardService.createCard(cardData).subscribe(res => this.showModal = false);
-    // this.boardService.createCard(cardData).pipe(
-    //   mergeMap(() => )
-    // );
+    this.instanceSubscription.push(
+      this.boardService.createCard(cardData).subscribe(res => {
+        this.showModal = false;
+        this.getAllCards();
+      })
+    );
   }
 
-  editCard(id: string) {
-    console.log(id)
+  editCard(task: any) {
+    this.taskToUpdate = task;
+    this.showModal = true;
+
   }
 
   updateCard(cardData: any): void {
-    this.boardService.updateCard(cardData)
-      .subscribe((res: any) => {
-        const index = this.cards.find(({ id }) => id === res.id);
-        console.log(index);
-      });
+    this.instanceSubscription.push(
+      this.boardService.updateCard(cardData)
+        .subscribe((res: any) => {
+          const index = this.cards.find(({ id }) => id === res.id);
+        })
+    );
   }
 
   openModal(): void {
@@ -92,7 +95,7 @@ export class BoardComponent implements OnInit {
     this.showModal = false;
   }
 
-  OnDestroy() {
+  ngOnDestroy() {
     this.instanceSubscription.forEach((subscription: Subscription) => subscription.unsubscribe());
   }
 
