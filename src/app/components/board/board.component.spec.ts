@@ -34,6 +34,7 @@ describe('BoardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BoardComponent);
     component = fixture.componentInstance;
+    boardService = TestBed.get(BoardService);
     fixture.detectChanges();
   });
 
@@ -72,6 +73,30 @@ describe('BoardComponent', () => {
     component.editCard(dummyCard);
     expect(component.showModal).toBeTruthy();
     expect(component.cardToUpdate).toEqual(dummyCard);
+  });
+
+  it('getAllCards method should call service method getAllCards', () => {
+    spyOn(boardService, 'getAllCards').and.callThrough();
+    component.getAllCards();
+    expect(boardService.getAllCards).toHaveBeenCalled();
+  });
+
+  it('deleteCard method should call service method deleteCard', () => {
+    spyOn(boardService, 'deleteCardById').and.callThrough();
+    component.deleteCard('test');
+    expect(boardService.deleteCardById).toHaveBeenCalled();
+  });
+
+  it('addCard method should call service method addCard', () => {
+    spyOn(boardService, 'createCard').and.callThrough();
+    component.addCard(dummyCard);
+    expect(boardService.createCard).toHaveBeenCalled();
+  });
+
+  it('updateCard method should call service method updateCard', () => {
+    spyOn(boardService, 'updateCard').and.callThrough();
+    component.updateCard(dummyCard);
+    expect(boardService.updateCard).toHaveBeenCalled();
   });
 
 });

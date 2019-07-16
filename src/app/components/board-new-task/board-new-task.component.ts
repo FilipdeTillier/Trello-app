@@ -25,12 +25,12 @@ export class BoardNewTaskComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const { name, desc } = this.card;
+
     this.form = this.formBuilder.group({
-      [FORM_PARAMS.cardName]: [name || '', [
+      [FORM_PARAMS.cardName]: [this.card ? this.card.name : '', [
         Validators.required
       ]],
-      [FORM_PARAMS.cardDescription]: [desc || '', [
+      [FORM_PARAMS.cardDescription]: [this.card ? this.card.desc : '', [
       ]],
     });
   }

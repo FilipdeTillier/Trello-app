@@ -52,7 +52,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCardsByBoardId(cards, idList): Card[] {
+  getCardsByBoardId(cards: Card[], idList: String): Card[] {
     return cards.filter((card: Card) => card.idList === idList);
   }
 
@@ -74,7 +74,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   editCard(card: Card) {
     this.cardToUpdate = card;
     this.showModal = true;
-
   }
 
   updateCard(cardData: Card): void {
