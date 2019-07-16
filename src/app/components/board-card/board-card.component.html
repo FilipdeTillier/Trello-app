@@ -4,6 +4,7 @@
         <button class="card__button-delete" (click)="deleteCard()">Delete</button>
     </div>
     <div class="card__data">
-        {{card.name}}
+        <p><b>Task name:</b> {{card.name}}</p>
+        <p><b>Task description:</b> {{card.desc || '-'}}</p>
     </div>
 </div>
