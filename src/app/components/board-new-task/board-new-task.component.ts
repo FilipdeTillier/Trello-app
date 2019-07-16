@@ -1,10 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { BoardService } from 'src/app/services/board.service';
+import { Card } from 'src/app/interfaces/Card';
 
 export const FORM_PARAMS = {
-  taskName: 'name',
-  description: 'desc'
+  cardName: 'name',
+  cardDescription: 'desc'
 };
 
 @Component({
@@ -13,10 +14,10 @@ export const FORM_PARAMS = {
   styleUrls: ['./board-new-task.component.scss']
 })
 export class BoardNewTaskComponent implements OnInit, OnDestroy {
-  @Input() task: any;
-  @Output() add: EventEmitter<any> = new EventEmitter();
-  @Output() cancel: EventEmitter<any> = new EventEmitter();
-  @Output() resetTask: EventEmitter<any> = new EventEmitter();
+  @Input() card: Card | any;
+  @Output() add: EventEmitter<Card> = new EventEmitter();
+  @Output() cancel: EventEmitter<boolean> = new EventEmitter();
+  @Output() resetCard: EventEmitter<Object> = new EventEmitter();
   public form: FormGroup;
 
   constructor(
@@ -24,12 +25,12 @@ export class BoardNewTaskComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const { name, desc } = this.task;
+    const { name, desc } = this.card;
     this.form = this.formBuilder.group({
-      [FORM_PARAMS.taskName]: [name || '', [
+      [FORM_PARAMS.cardName]: [name || '', [
         Validators.required
       ]],
-      [FORM_PARAMS.description]: [desc || '', [
+      [FORM_PARAMS.cardDescription]: [desc || '', [
       ]],
     });
   }
@@ -56,7 +57,7 @@ export class BoardNewTaskComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.form.reset();
-    this.resetTask.emit({});
+    this.resetCard.emit({});
   }
 
 }

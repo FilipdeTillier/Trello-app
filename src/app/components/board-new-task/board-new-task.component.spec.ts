@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
 
 import { BoardNewTaskComponent } from './board-new-task.component';
 
@@ -8,14 +10,18 @@ describe('BoardNewTaskComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BoardNewTaskComponent ]
+      imports: [FormsModule, ReactiveFormsModule],
+      declarations: [BoardNewTaskComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BoardNewTaskComponent);
     component = fixture.componentInstance;
+    component.card = {
+      name: 'Task'
+    };
     fixture.detectChanges();
   });
 

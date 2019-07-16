@@ -1,9 +1,9 @@
 <div class="card">
     <div class="card__actions">
-        <button (click)="editCard()">Edit</button>
-        <button (click)="deleteCard()">Delete</button>
+        <button class="card__button-edit" (click)="editCard()">Edit</button>
+        <button class="card__button-delete" (click)="deleteCard()">Delete</button>
     </div>
     <div class="card__data">
-        {{task.name}}
+        {{card.name}}
     </div>
 </div>

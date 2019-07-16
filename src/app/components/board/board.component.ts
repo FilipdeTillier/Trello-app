@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { BoardService } from 'src/app/services/board.service';
+import { Card } from 'src/app/interfaces/Card';
 
 @Component({
   selector: 'app-board',
@@ -11,20 +12,18 @@ import { BoardService } from 'src/app/services/board.service';
 })
 export class BoardComponent implements OnInit, OnDestroy {
   public showModal: boolean = false;
-  public taskToUpdate: any;
-  public todo: any;
-  public doing: any;
-  public done: any;
-  public cards: any = [];
+  public cardToUpdate: Card;
+  public todo: Card[];
+  public doing: Card[];
+  public done: Card[];
+  public cards: Card[] = [];
   private toDoListId: string = "5d289689edfbe259d1ae68f3";
   private doingListId: string = "5d2896899b381b8a08e8f1db";
   private doneListId: string = "5d2896890ae4ef44fa377ac6";
 
   private instanceSubscription: Subscription[] = [];
 
-  constructor(private boardService: BoardService) {
-
-  }
+  constructor(private boardService: BoardService) { }
 
   ngOnInit() {
     this.getAllCards();
@@ -32,8 +31,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   getAllCards(): void {
     this.instanceSubscription.push(
-      this.boardService.getItems([this.toDoListId, this.doingListId, this.doneListId])
-        .subscribe(cards => {
+      this.boardService.getAllCards([this.toDoListId, this.doingListId, this.doneListId])
+        .subscribe((cards: Card[]) => {
           this.cards = [...cards.flat()];
           this.todo = this.getCardsByBoardId(this.cards, this.toDoListId);
           this.doing = this.getCardsByBoardId(this.cards, this.doingListId);
@@ -53,37 +52,35 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCardsByBoardId(cards, idList) {
-    return cards.filter(card => card.idList === idList);
+  getCardsByBoardId(cards, idList): Card[] {
+    return cards.filter((card: Card) => card.idList === idList);
   }
 
   deleteCard(id: string) {
     this.instanceSubscription.push(
-      this.boardService.deleteCardById(id).subscribe(res => this.getAllCards()),
+      this.boardService.deleteCardById(id).subscribe(() => this.getAllCards()),
     )
   }
 
-  addCard(cardData: any) {
+  addCard(cardData: Card) {
     this.instanceSubscription.push(
-      this.boardService.createCard(cardData).subscribe(res => {
+      this.boardService.createCard(cardData).subscribe(() => {
         this.showModal = false;
         this.getAllCards();
       })
     );
   }
 
-  editCard(task: any) {
-    this.taskToUpdate = task;
+  editCard(card: Card) {
+    this.cardToUpdate = card;
     this.showModal = true;
 
   }
 
-  updateCard(cardData: any): void {
+  updateCard(cardData: Card): void {
     this.instanceSubscription.push(
       this.boardService.updateCard(cardData)
-        .subscribe((res: any) => {
-          const index = this.cards.find(({ id }) => id === res.id);
-        })
+        .subscribe((card: Card) => this.cards.find(({ id }: Card) => id === card.id))
     );
   }
 

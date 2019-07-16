@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Card } from 'src/app/interfaces/Card';
 
 @Component({
   selector: 'app-board-card',
@@ -6,20 +7,20 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./board-card.component.scss']
 })
 export class BoardCardComponent implements OnInit {
-  @Input() task;
-  @Output() delete: EventEmitter<any> = new EventEmitter();
-  @Output() edit: EventEmitter<any> = new EventEmitter();
+  @Input() card: Card;
+  @Output() delete: EventEmitter<String> = new EventEmitter();
+  @Output() edit: EventEmitter<Card> = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
   }
 
   deleteCard() {
-    this.delete.emit(this.task.id);
+    this.delete.emit(this.card.id);
   }
 
   editCard() {
-    this.edit.emit(this.task);
+    this.edit.emit(this.card);
   }
 
 }
