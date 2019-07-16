@@ -4,7 +4,6 @@ import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpResponse }
 
 import { Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-// import 'rxjs/add/operator/do';
 
 @Injectable()
 export class CardInterceptor implements HttpInterceptor {
