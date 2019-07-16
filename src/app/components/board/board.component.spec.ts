@@ -9,7 +9,6 @@ import { BoardCardComponent } from '../board-card/board-card.component';
 import { BoardNewTaskComponent } from '../board-new-task/board-new-task.component';
 import { Card } from 'src/app/interfaces/Card';
 import { BoardService } from 'src/app/services/board.service';
-import { HttpClient } from '@angular/common/http';
 
 describe('BoardComponent', () => {
   let component: BoardComponent;

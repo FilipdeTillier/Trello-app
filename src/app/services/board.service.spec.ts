@@ -17,19 +17,15 @@ describe('BoardService', () => {
     idList: 'test',
     desc: 'test',
   }
-  // let valueServiceSpy: jasmine.SpyObj<BoardService>;
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('BoardService', ['getCardsFromListById']);
     TestBed.configureTestingModule({
       providers: [
-        BoardService,
-        // { provide: BoardService, useValue: spy }
+        BoardService
       ],
       imports: [HttpClientTestingModule]
     })
     boardService = TestBed.get(BoardService);
     httpMock = TestBed.get(HttpTestingController);
-    // valueServiceSpy = TestBed.get(BoardService);
   });
 
   it('should be created', () => {
@@ -74,18 +70,6 @@ describe('BoardService', () => {
     const request = httpMock.expectOne(url);
     expect(request.request.method).toBe('DELETE');
     request.flush(dummyCard);
-  });
-
-  it('should update card from list on API PUT method', () => {
-    const url = `https://api.trello.com/1/cards/${toDoListId}?${auth}`;
-
-    boardService.updateCard(dummyCard).subscribe((data: Card) => {
-      expect(data).toBe(dummyCard);
-    });
-
-    // const request = httpMock.expectOne(url);
-    // expect(request.request.method).toBe('PUT');
-    // request.flush(dummyCard);
   });
 
 });

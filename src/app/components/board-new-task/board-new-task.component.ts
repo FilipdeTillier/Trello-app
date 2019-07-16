@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { BoardService } from 'src/app/services/board.service';
+
 import { Card } from 'src/app/interfaces/Card';
 
 export const FORM_PARAMS = {
